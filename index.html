@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meus Jogos Incríveis</title>
+    <link rel="stylesheet" href="css/main-style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #121212;
+        color: #e0e0e0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      h1 {
+        margin-bottom: 40px;
+      }
+      .game-list a {
+        display: block;
+        background-color: #007bff;
+        color: white;
+        padding: 15px 30px;
+        margin: 10px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 1.2em;
+        transition: transform 0.2s;
+      }
+      .game-list a:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bem-vindo à Minha Central de Jogos!</h1>
+    <div class="game-list">
+      <a href="jogos/jogo-das-5-palavras/">Jogar Jogo das 5 Palavras</a>
+      <a href="jogos/jogo-senha/">Jogar Jogo das senhas númericas</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+# Arquivo de configuração de ambiente (Contém segredos!)
+.env
+.env.local
+
+# Dependências do Node.js (pasta gigante e desnecessária de ser versionada)
+# Se você usar 'npm install' ou 'yarn', essa pasta será criada.
+node_modules/
+
+# Arquivos de build (se você usar ferramentas como Vite, Parcel, etc.)
+dist/
+build/
+
+# Arquivos de sistema operacional
+.DS_Store
+
+# Arquivos de configuração de IDEs (opcional, mas é uma boa prática)
+.vscode/
+.idea/
+js/config.js
