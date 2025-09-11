@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Meus Jogos Incríveis</title>
+    <title>mesojogos</title>
     <link rel="stylesheet" href="css/main-style.css" />
     <style>
       body {
@@ -14,8 +14,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh; /* Usamos min-height para o rodapé funcionar bem */
         margin: 0;
+        padding-bottom: 80px; /* Espaço para o rodapé não sobrepor o conteúdo */
       }
       h1 {
         margin-bottom: 40px;
@@ -34,6 +35,25 @@
       .game-list a:hover {
         transform: scale(1.05);
       }
+
+      /* --- CÓDIGO NOVO DO RODAPÉ --- */
+      footer {
+        position: absolute; /* Posição fixa na parte de baixo */
+        bottom: 0;
+        width: 100%;
+        background-color: #1e1e1e;
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #333;
+      }
+      footer a {
+        color: #007bff;
+        text-decoration: none;
+        margin: 0 15px; /* Espaçamento entre os links */
+      }
+      footer a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
@@ -42,5 +62,10 @@
       <a href="jogos/jogo-das-5-palavras/">Jogar Jogo das 5 Palavras</a>
       <a href="jogos/jogo-senha/">Jogar Jogo das senhas númericas</a>
     </div>
+
+    <footer>
+      <a href="politica-de-privacidade.html">Política de Privacidade</a>
+      <a href="termos-de-uso.html">Termos de Uso</a>
+    </footer>
   </body>
 </html>

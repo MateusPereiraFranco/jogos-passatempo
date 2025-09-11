@@ -1,0 +1,52 @@
+/* Estilo geral para as páginas de conteúdo */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+  line-height: 1.6; /* Melhora a legibilidade do texto */
+}
+
+/* Container para centralizar o conteúdo */
+.container {
+  background-color: #1e1e1e;
+  margin: 40px auto; /* Espaçamento em cima/embaixo e centralizado dos lados */
+  padding: 20px 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  max-width: 800px; /* Largura máxima para o texto não ficar muito longo */
+}
+
+h1 {
+  color: #007bff;
+  border-bottom: 2px solid #007bff; /* Linha abaixo do título */
+  padding-bottom: 10px;
+}
+
+h2 {
+  color: #e0e0e0;
+  margin-top: 30px;
+}
+
+p {
+  text-align: justify; /* Alinha o texto de forma mais profissional */
+}
+
+/* Estilo para o texto de placeholder */
+.placeholder-text {
+  color: #888;
+  font-style: italic;
+}
+
+/* Link para voltar */
+.back-link {
+  display: block;
+  margin-top: 30px;
+  text-align: center;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
