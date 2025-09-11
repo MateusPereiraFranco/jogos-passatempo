@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jogo das 5 Palavras</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="image/favicon.png" />
+  </head>
+  <body>
+    <div id="toast-notification" class="hidden"></div>
+    <div id="toast-notification" class="hidden"></div>
+    <div class="container">
+      <a href="../../index.html" id="btn-home" class="btn-home hidden"
+        >&#x1F3E0; Home</a
+      >
+      <button id="btn-voltar" class="btn-voltar hidden">&#x2190;</button>
+
+      <section id="tela-inicial">
+        <h1>Jogo das 5 Palavras</h1>
+        <div class="menu-opcoes">
+          <button id="btn-jogar-local">Jogar no mesmo celular</button>
+          <button id="btn-jogar-online">Jogar Online</button>
+        </div>
+      </section>
+
+      <section id="tela-online-lobby" class="hidden">
+        <h2>Salas Online</h2>
+        <div class="lobby-actions">
+          <button id="btn-ir-criar-sala">Criar Sala</button>
+          <button id="btn-atualizar-salas">Atualizar Lista</button>
+        </div>
+        <ul id="lista-salas" class="lista-salas"></ul>
+      </section>
+
+      <section id="tela-criar-sala" class="hidden">
+        <h2>Criar Nova Sala</h2>
+        <div class="input-group">
+          <label for="nome-sala-input">Nome da Sala</label>
+          <input
+            type="text"
+            id="nome-sala-input"
+            placeholder="Ex: Sala dos Campeões"
+            maxlength="20"
+          />
+        </div>
+        <div class="input-group">
+          <label for="senha-sala-input">Senha (opcional)</label>
+          <input
+            type="password"
+            id="senha-sala-input"
+            placeholder="Deixe em branco para sala pública"
+          />
+        </div>
+        <div class="input-group">
+          <label for="nome-criador-input">Seu Nome</label>
+          <input
+            type="text"
+            id="nome-criador-input"
+            placeholder="Como você quer ser chamado"
+            maxlength="15"
+          />
+        </div>
+        <button id="btn-confirmar-criar-sala">Confirmar e Criar</button>
+      </section>
+
+      <section id="tela-espera" class="hidden">
+        <h2>Sala Criada!</h2>
+        <p class="aguardando-animado">Aguardando oponente entrar...</p>
+      </section>
+
+      <section id="tela-nomes" class="hidden">
+        <h1>Jogo das 5 Palavras</h1>
+        <div class="input-group" id="container-p1-name">
+          <label for="p1-name-input">Nome do Jogador 1</label>
+          <input type="text" id="p1-name-input" placeholder="Ex: Alice" />
+        </div>
+        <div class="input-group" id="container-p2-name">
+          <label for="p2-name-input">Nome do Jogador 2</label>
+          <input type="text" id="p2-name-input" placeholder="Ex: Beto" />
+        </div>
+        <button id="btn-iniciar-setup">Começar</button>
+      </section>
+
+      <section id="tela-setup-palavras" class="hidden">
+        <h2 id="setup-titulo">Vez de Jogador</h2>
+        <p id="setup-descricao"></p>
+        <div id="setup-inputs"></div>
+        <button id="btn-confirmar-palavras">Confirmar Palavras</button>
+      </section>
+
+      <section id="tela-aguardando-palavras" class="hidden">
+        <h2>Palavras confirmadas!</h2>
+        <p class="aguardando-animado">Aguardando oponente confirmar...</p>
+      </section>
+
+      <section id="tela-transicao" class="hidden">
+        <h2>Preparar!</h2>
+        <p id="transicao-texto"></p>
+        <button id="btn-passar-vez">Continuar</button>
+      </section>
+
+      <main id="tela-jogo" class="hidden">
+        <header class="placar-header">
+          <div id="header-p1" class="player-status">
+            <span id="header-p1-name"></span
+            ><span id="header-p1-score" class="score"></span>
+          </div>
+          <div id="header-p2" class="player-status">
+            <span id="header-p2-name"></span
+            ><span id="header-p2-score" class="score"></span>
+          </div>
+        </header>
+        <section id="jogador2-board" class="player-board">
+          <h2 id="board-title-2"></h2>
+          <ul id="jogador2-words" class="word-list"></ul>
+        </section>
+        <section id="jogador1-board" class="player-board">
+          <h2 id="board-title-1"></h2>
+          <ul id="jogador1-words" class="word-list"></ul>
+        </section>
+
+        <div class="input-area">
+          <input
+            type="text"
+            id="guess-input"
+            placeholder="Digite seu palpite..."
+          />
+          <button id="submit-guess-btn">Adivinhar</button>
+        </div>
+      </main>
+
+      <section id="tela-vitoria" class="hidden">
+        <h2 id="vencedor-nome"></h2>
+        <p class="vitoria-mensagem">
+          Parabéns, você adivinhou todas as palavras!
+        </p>
+        <div class="placar-final">
+          <span id="final-p1-name"></span><span id="final-p1-score"></span> VS
+          <span id="final-p2-name"></span><span id="final-p2-score"></span>
+        </div>
+        <button id="btn-revanche-vitoria">Jogar Revanche</button>
+        <button id="btn-novo-jogo">Novo Jogo</button>
+      </section>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
