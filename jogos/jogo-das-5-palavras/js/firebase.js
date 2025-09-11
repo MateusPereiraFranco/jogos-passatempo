@@ -8,7 +8,6 @@ export function escutarSalasDisponiveis(callback) {
   });
   return refSalas; // Retorna a referência
 }
-
 export function buscarMetadadosSala(salaId, callback) {
   database
     .ref(`salas/${salaId}/metadata`)
