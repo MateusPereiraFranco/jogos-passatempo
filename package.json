@@ -1,0 +1,24 @@
+{
+  "name": "jogosweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "generate-config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-config": "node generate-config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MateusPereiraFranco/JogosPassatempo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MateusPereiraFranco/JogosPassatempo/issues"
+  },
+  "homepage": "https://github.com/MateusPereiraFranco/JogosPassatempo#readme",
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}
