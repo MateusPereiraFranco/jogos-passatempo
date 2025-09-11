@@ -8,6 +8,7 @@ export function escutarSalasDisponiveis(callback) {
   });
   return refSalas; // Retorna a referência
 }
+
 export function buscarMetadadosSala(salaId, callback) {
   database
     .ref(`salas/${salaId}/metadata`)
@@ -26,6 +27,7 @@ export function entrarNaSalaFirebase(salaId, nomeJogador2) {
   };
   return database.ref().update(updates);
 }
+
 export function confirmarPalavrasFirebase(salaId, meuPlayerId, palavras) {
   const updates = {
     [`/salas/${salaId}/gameState/jogadores/${meuPlayerId - 1}/palavras`]:
