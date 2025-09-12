@@ -19,7 +19,3 @@ const firebaseConfig = {
 // O 'fs.mkdirSync' garante que a pasta 'js' exista antes de criar o arquivo
 fs.mkdirSync("js", { recursive: true });
 fs.writeFileSync("js/config.js", configContent);
-
-console.log(
-  "Arquivo de configuração do Firebase gerado com sucesso em js/config.js"
-);
