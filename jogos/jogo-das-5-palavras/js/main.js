@@ -10,6 +10,7 @@ let meuPlayerId = null;
 let refSalaAtual = null;
 let jogadorAtualSetup = 1;
 let refEscutaLobby = null;
+let palavrasProibidas = {};
 
 function playSound(soundFile) {
   const audio = new Audio(`audio/${soundFile}`);
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((data) => {
       config = data;
     });
+  carregarFiltroDePalavras();
   vincularEventos();
   const params = new URLSearchParams(window.location.search);
   const idSalaURL = params.get("sala");
@@ -79,6 +81,25 @@ function vincularEventos() {
       playSound("keypress.mp3");
     }
   });
+}
+
+function carregarFiltroDePalavras() {
+  const refPalavras = firebase.database().ref("palavrasProibidas");
+  refPalavras.once("value", (snapshot) => {
+    if (snapshot.exists()) {
+      palavrasProibidas = snapshot.val();
+    } else {
+      console.warn(
+        "A lista de palavras proibidas não foi encontrada no Firebase."
+      );
+    }
+  });
+}
+
+function verificarPalavrao(palavra) {
+  const palavraNormalizada = Game.normalizeString(palavra.trim());
+  // A verificação agora é super rápida: checa se a chave existe no objeto.
+  return palavrasProibidas.hasOwnProperty(palavraNormalizada);
 }
 
 // --- HANDLERS ---
@@ -139,6 +160,30 @@ function handleConfirmarCriarSala() {
   const criador = UI.elements.nomeCriadorInput.value.trim();
   if (!nomeSala || !criador)
     return UI.showToast("Preencha todos os campos!", "error");
+  if (/\s/.test(nomeSala)) {
+    return UI.showToast(
+      `O nome da sala "${nomeSala}" não pode conter espaços.`,
+      "error"
+    );
+  }
+  if (/\s/.test(criador)) {
+    return UI.showToast(
+      `O nome do criador "${criador}" não pode conter espaços.`,
+      "error"
+    );
+  }
+  if (verificarPalavrao(nomeSala)) {
+    return UI.showToast(
+      `A palavra "${nomeSala}" vai contra as diretrizes do site.`,
+      "error"
+    );
+  }
+  if (verificarPalavrao(criador)) {
+    return UI.showToast(
+      `A palavra "${criador}" vai contra as diretrizes do site.`,
+      "error"
+    );
+  }
 
   salaId = Math.random().toString(36).substring(2, 6).toUpperCase();
   meuPlayerId = 1;
@@ -171,12 +216,50 @@ function handleInicioSetup() {
     const p2Name = UI.elements.p2NameInput.value.trim();
     if (!p1Name || !p2Name)
       return UI.showToast("Preencha todos os nomes!", "error");
+    if (/\s/.test(p1Name)) {
+      // Verifica se a palavra contém espaços
+      return UI.showToast(
+        `O nome "${p1Name}" não pode conter espaços.`,
+        "error"
+      );
+    }
+    if (verificarPalavrao(p1Name)) {
+      return UI.showToast(
+        `A palavra "${p1Name}" vai contra as diretrizes do site.`,
+        "error"
+      );
+    }
+    if (/\s/.test(p2Name)) {
+      // Verifica se a palavra contém espaços
+      return UI.showToast(
+        `O nome "${p2Name}" não pode conter espaços.`,
+        "error"
+      );
+    }
+    if (verificarPalavrao(p2Name)) {
+      return UI.showToast(
+        `A palavra "${p2Name}" vai contra as diretrizes do site.`,
+        "error"
+      );
+    }
     gameState = Game.criarEstadoJogoLocal(p1Name, p2Name);
     jogadorAtualSetup = 1;
     UI.prepararTelaSetup(gameState.jogadores[0], config);
     UI.mudarTela("setup");
   } else {
     if (!p1Name) return UI.showToast("Digite seu nome!", "error");
+    if (/\s/.test(p1Name)) {
+      return UI.showToast(
+        `O nome "${p1Name}" não pode conter espaços.`,
+        "error"
+      );
+    }
+    if (verificarPalavrao(p1Name)) {
+      return UI.showToast(
+        `A palavra "${p1Name}" vai contra as diretrizes do site.`,
+        "error"
+      );
+    }
     Firebase.entrarNaSalaFirebase(salaId, p1Name).then(() => {
       refSalaAtual = Firebase.iniciarEscutaSala(salaId, onGameStateUpdate);
     });
@@ -197,8 +280,14 @@ function handleConfirmarPalavras() {
         "error"
       );
     }
-    if (palavra.length < 3) {
+    if (palavra.length < 2) {
       return UI.showToast(`A palavra "${palavra}" é muito curta.`, "error");
+    }
+    if (verificarPalavrao(palavra)) {
+      return UI.showToast(
+        `A palavra "${palavra}" vai contra as diretrizes do site.`,
+        "error"
+      );
     }
   }
 

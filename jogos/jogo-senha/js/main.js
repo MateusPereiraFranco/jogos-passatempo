@@ -7,6 +7,7 @@ let salaId = null;
 let meuPlayerId = null;
 let refSalaAtual = null;
 let refEscutaLobby = null;
+let palavrasProibidas = {};
 
 function playSound(soundFile) {
   const audio = new Audio(`audio/${soundFile}`);
@@ -18,6 +19,52 @@ function validarSenha(senha) {
     return "A senha deve conter 4 dígitos numéricos.";
   }
   return null;
+}
+
+function validarNome(nome) {
+  // 1. Verifica se o nome está vazio ou contém apenas espaços
+  if (!nome || nome.trim() === "") {
+    return "O nome não pode estar vazio.";
+  }
+
+  // 2. Verifica se o nome contém espaços
+  if (/\s/.test(nome)) {
+    return `O nome "${nome}" não pode conter espaços.`;
+  }
+
+  // 3. Verifica se o nome contém palavras proibidas
+  if (verificarPalavrao(nome)) {
+    return `O nome "${nome}" vai contra as diretrizes do site.`;
+  }
+
+  // Se passou por todas as verificações, o nome é válido
+  return null;
+}
+
+function carregarFiltroDePalavras() {
+  const refPalavras = firebase.database().ref("palavrasProibidas");
+  refPalavras.once("value", (snapshot) => {
+    if (snapshot.exists()) {
+      palavrasProibidas = snapshot.val();
+    } else {
+      console.warn(
+        "A lista de palavras proibidas não foi encontrada no Firebase."
+      );
+    }
+  });
+}
+
+function normalizeString(str) {
+  if (!str) return "";
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
+
+function verificarPalavrao(palavra) {
+  const palavraNormalizada = normalizeString(palavra.trim());
+  return palavrasProibidas.hasOwnProperty(palavraNormalizada);
 }
 
 function gerarFeedback(palpite, senhaSecreta) {
@@ -57,6 +104,30 @@ function handleConfirmarCriarSala() {
   const criador = UI.elements.nomeCriadorInput.value.trim();
   if (!nomeSala || !criador)
     return UI.showToast("Preencha todos os campos!", "error");
+  if (/\s/.test(criador)) {
+    return UI.showToast(
+      `O nome do criador "${criador}" não pode conter espaços.`,
+      "error"
+    );
+  }
+  if (verificarPalavrao(criador)) {
+    return UI.showToast(
+      `A palavra "${criador}" vai contra as diretrizes do site.`,
+      "error"
+    );
+  }
+  if (/\s/.test(nomeSala)) {
+    return UI.showToast(
+      `O nome do criador "${nomeSala}" não pode conter espaços.`,
+      "error"
+    );
+  }
+  if (verificarPalavrao(nomeSala)) {
+    return UI.showToast(
+      `A palavra "${nomeSala}" vai contra as diretrizes do site.`,
+      "error"
+    );
+  }
 
   salaId = Math.random().toString(36).substring(2, 6).toUpperCase();
   meuPlayerId = 1;
@@ -116,9 +187,17 @@ function handleCliqueSala(event) {
 
 function iniciarJogo() {
   const p1Name = UI.elements.p1NameInput.value.trim() || "Jogador 1";
+  const erroP1 = validarNome(p1Name);
+  if (erroP1) {
+    return UI.showToast(erroP1, "error");
+  }
 
   if (gameMode === "local") {
     const p2Name = UI.elements.p2NameInput.value.trim() || "Jogador 2";
+    const erroP2 = validarNome(p2Name);
+    if (erroP2) {
+      return UI.showToast(erroP2, "error");
+    }
     gameState = {
       players: [
         { id: 1, name: p1Name, secretCode: null, history: [] },
@@ -457,6 +536,7 @@ function vincularEventos() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  carregarFiltroDePalavras();
   vincularEventos();
   UI.mudarTela("inicial");
 });
