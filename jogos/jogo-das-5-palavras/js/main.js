@@ -11,6 +11,85 @@ let refSalaAtual = null;
 let jogadorAtualSetup = 1;
 let refEscutaLobby = null;
 let palavrasProibidas = {};
+const TEMPO_TURNO = 60;
+let turnTimer = null;
+let tempoRestante = TEMPO_TURNO;
+
+function pararTimer() {
+  if (turnTimer) {
+    clearInterval(turnTimer);
+    turnTimer = null;
+  }
+}
+
+function atualizarDisplayTimer() {
+  const minutos = Math.floor(tempoRestante / 60);
+  const segundos = tempoRestante % 60;
+  UI.elements.timerDisplay.textContent = `${minutos}:${segundos
+    .toString()
+    .padStart(2, "0")}`;
+
+  if (tempoRestante <= 10) {
+    UI.elements.timerDisplay.style.color = "#dc3545";
+    UI.elements.timerDisplay.style.color = "#e0e0e0";
+  }
+}
+
+function handlePassarTurnoPorTempo() {
+  pararTimer();
+  UI.showToast("Tempo esgotado! Passando a vez.", "error");
+  playSound("wrong.mp3"); // Toca o som de erro
+
+  const novoEstado = JSON.parse(JSON.stringify(gameState));
+
+  // 1. Encontra o defensor e a palavra atual
+  const defensorIdx = novoEstado.turno === 1 ? 1 : 0;
+  const defensorKey = `jogador${defensorIdx + 1}`;
+  const descobertas = novoEstado.palavrasDescobertas[defensorKey];
+  const indice = descobertas.indexOf(false); // Acha a palavra que está sendo adivinhada
+
+  if (indice !== -1) {
+    const palavraCerta = novoEstado.jogadores[defensorIdx].palavras[indice];
+    const dicasAtuais = new Set(novoEstado.dicas[defensorKey][indice] || []);
+
+    for (let i = 0; i < palavraCerta.length; i++) {
+      if (!dicasAtuais.has(i)) {
+        if (!novoEstado.dicas[defensorKey][indice]) {
+          novoEstado.dicas[defensorKey][indice] = [];
+        }
+        novoEstado.dicas[defensorKey][indice].push(i);
+        break;
+      }
+    }
+  }
+
+  novoEstado.turno = novoEstado.turno === 1 ? 2 : 1;
+
+  if (gameMode === "local") {
+    gameState = novoEstado;
+    UI.renderizarTabuleiro(gameState, meuPlayerId, gameMode);
+    iniciarTimerTurno();
+  } else {
+    Firebase.atualizarEstadoJogoFirebase(salaId, novoEstado);
+  }
+}
+
+function iniciarTimerTurno() {
+  pararTimer(); // Garante que nenhum timer antigo esteja rodando
+  tempoRestante = TEMPO_TURNO;
+  atualizarDisplayTimer(); // Mostra "1:00" imediatamente
+
+  // Inicia o intervalo que roda a cada 1 segundo
+  turnTimer = setInterval(() => {
+    tempoRestante--; // Decrementa o tempo
+    atualizarDisplayTimer(); // Atualiza a tela
+
+    if (tempoRestante <= 0) {
+      // Quando o tempo zera, passa o turno
+      handlePassarTurnoPorTempo();
+    }
+  }, 1000); // 1000ms = 1 segundo
+}
 
 function playSound(soundFile) {
   const audio = new Audio(`audio/${soundFile}`);
@@ -301,6 +380,7 @@ function handleConfirmarPalavras() {
       gameState = Game.prepararPartida(gameState, config);
       UI.renderizarTabuleiro(gameState, meuPlayerId, gameMode);
       UI.mudarTela("jogo");
+      iniciarTimerTurno();
     }
   } else {
     Firebase.confirmarPalavrasFirebase(salaId, meuPlayerId, palavras);
@@ -331,6 +411,8 @@ function handleGuess() {
     if (gameState.vencedor) {
       playSound("win.mp3");
       UI.mostrarTelaVitoria(gameState);
+    } else {
+      iniciarTimerTurno();
     }
   } else {
     Firebase.atualizarEstadoJogoFirebase(salaId, estadoFinal);
@@ -379,6 +461,7 @@ function handleRevanche() {
 }
 
 function handleNovoJogo() {
+  pararTimer();
   if (gameMode === "online" && salaId && meuPlayerId === 1)
     Firebase.removerSalaFirebase(salaId);
   pararEscutaLobby();
@@ -423,10 +506,12 @@ function onGameStateUpdate(novoEstado) {
     case "jogo":
       UI.renderizarTabuleiro(gameState, meuPlayerId, gameMode);
       UI.mudarTela("jogo");
+      iniciarTimerTurno();
       break;
     case "vitoria":
       if (vitoriaRecente) {
         playSound("win.mp3");
+        pararTimer();
       }
       UI.renderizarTabuleiro(gameState, meuPlayerId, gameMode);
       UI.mostrarTelaVitoria(gameState);
@@ -463,6 +548,7 @@ function handleVoltarClick() {
           "Tem certeza que deseja abandonar a partida? Todo o progresso será perdido."
         )
       ) {
+        pararTimer();
         handleNovoJogo();
       }
       break;

@@ -4,6 +4,7 @@ export const elements = {
   toast: document.getElementById("toast-notification"),
   btnHome: document.getElementById("btn-home"),
   btnVoltar: document.getElementById("btn-voltar"),
+  timerDisplay: document.getElementById("timer-display"),
   telas: {
     inicial: document.getElementById("tela-inicial"),
     onlineLobby: document.getElementById("tela-online-lobby"),

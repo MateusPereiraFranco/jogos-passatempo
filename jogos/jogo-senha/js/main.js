@@ -78,8 +78,13 @@ function gerarFeedback(palpite, senhaSecreta) {
       spans += `<span class="wrong-digit">${palpite[i]}</span>`;
     }
   }
+  const feedbackDigits = `<div class="feedback-digits">${spans}</div>`;
+
+  const acertosTexto = acertos === 1 ? "1 acerto" : `${acertos} acertos`;
+  const feedbackCounter = `<span class="feedback-counter">${acertosTexto}</span>`;
+
   return {
-    feedbackHTML: `<div class="feedback-digits">${spans}</div>`,
+    feedbackHTML: `<div class="feedback-row">${feedbackDigits}${feedbackCounter}</div>`,
     acertos,
   };
 }
