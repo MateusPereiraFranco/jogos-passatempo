@@ -24,13 +24,10 @@
         font-family: "Poppins", Arial, sans-serif;
         color: #e0e0e0;
         margin: 0;
-
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-
         box-sizing: border-box;
-
         background-color: #121212;
         background-image: radial-gradient(
           circle at 50% 0%,
@@ -63,7 +60,7 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(5px);
         border: 1px solid rgba(255, 255, 255, 0.1);
-        box-sizing: border-box; /* Importante para o padding funcionar bem */
+        box-sizing: border-box;
       }
 
       h1 {
@@ -78,7 +75,6 @@
         text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
       }
 
-      /* Lista de jogos (botões) */
       .game-list {
         width: 100%;
         display: flex;
@@ -86,7 +82,6 @@
         align-items: center;
       }
 
-      /* BOTÕES ATUALIZADOS */
       .game-list a {
         display: block;
         width: 80%;
@@ -104,14 +99,63 @@
         box-sizing: border-box;
       }
 
-      /* NOVO EFEITO HOVER */
       .game-list a:hover {
         transform: scale(1.05) translateY(-3px);
         box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
         filter: brightness(1.1);
       }
 
-      /* Container para o anúncio */
+      /* --- CONTEÚDO DE TEXTO (PARA ADSENSE) --- */
+      .site-description {
+        font-size: 1.1em;
+        text-align: center;
+        line-height: 1.6;
+        max-width: 90%;
+        margin: -20px 0 30px 0;
+      }
+
+      /* NOVO BOTÃO DE TOGGLE */
+      .toggle-button {
+        background: none;
+        border: none;
+        color: #00aaff;
+        font-size: 1em;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: underline;
+        padding: 10px;
+        margin-top: 15px;
+        font-family: "Poppins", sans-serif;
+      }
+
+      .game-descriptions {
+        /* OCULTO POR PADRÃO */
+        display: none;
+        width: 90%;
+        margin-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 20px;
+      }
+
+      /* CLASSE ADICIONADA VIA JS PARA MOSTRAR */
+      .game-descriptions.visible {
+        display: block;
+      }
+
+      .game-descriptions h2 {
+        color: #00aaff;
+        text-align: center;
+        margin-bottom: 10px;
+      }
+
+      .game-descriptions p {
+        font-size: 0.95em;
+        line-height: 1.7;
+        text-align: justify;
+        margin-bottom: 25px;
+      }
+      /* --- FIM DO NOVO CSS --- */
+
       .ad-container {
         width: 100%;
         margin-top: 30px;
@@ -121,17 +165,14 @@
         align-items: center;
       }
 
-      /* === CORREÇÃO DO RODAPÉ (CSS do Footer) === */
       footer {
-        /* NÃO precisa mais de "position: absolute" */
         width: 100%;
         background-color: #1e1e1e;
         text-align: center;
         padding: 20px 0;
         border-top: 1px solid #333;
-        box-sizing: border-box; /* Boa prática */
+        box-sizing: border-box;
       }
-      /* === FIM DA CORREÇÃO === */
 
       footer a {
         color: #007bff;
@@ -143,48 +184,72 @@
         text-decoration: underline;
       }
 
-      /* === BLOCO DE RESPONSIVIDADE (NOVO) === */
       @media (max-width: 640px) {
         body {
-          /* Remove o gradiente de fundo em telas pequenas, economiza performance */
           background-image: none;
         }
 
         .content-wrap {
-          /* Reduz o padding vertical em telas pequenas */
           padding: 20px 10px;
-          /* Remove o justify-content:center para colar o card no topo */
           justify-content: flex-start;
         }
 
         .main-container {
-          /* Reduz o padding interno do card */
-          padding: 120px 20px;
+          padding: 30px 20px;
           margin-top: 20px;
         }
 
         h1 {
-          /* Reduz o tamanho da fonte do título */
           font-size: 2.2em;
         }
 
         .game-list a {
-          /* Faz os botões ocuparem mais espaço na tela */
           width: 95%;
           padding: 15px 20px;
           font-size: 1.1em;
         }
       }
-      /* === FIM DO BLOCO DE RESPONSIVIDADE === */
     </style>
   </head>
   <body>
     <div class="content-wrap">
       <div class="main-container">
         <h1>Central de Jogos</h1>
+
+        <p class="site-description">
+          Bem-vindo ao MesoJogos! Nossa plataforma é dedicada a jogos de
+          navegador, casuais e divertidos, perfeitos para desafiar seus amigos.
+          Todos os nossos jogos são por turnos e podem ser jogados online ou
+          localmente.
+        </p>
+
         <div class="game-list">
           <a href="jogos/jogo-das-5-palavras/">Jogar Jogo das 5 Palavras</a>
           <a href="jogos/jogo-senha/">Jogar Jogo das Senhas Numéricas</a>
+        </div>
+
+        <button id="toggle-descriptions" class="toggle-button">
+          Ver descrição dos jogos
+        </button>
+
+        <div class="game-descriptions" id="descriptions-content">
+          <h2>Sobre o Jogo das 5 Palavras</h2>
+          <p>
+            Teste sua intuição! No Jogo das 5 Palavras, cada jogador escolhe 5
+            palavras secretas, onde cada palavra deve ter relação com a
+            anterior. O objetivo é adivinhar as palavras do seu oponente antes
+            que ele adivinhe as suas. É um jogo de turno, onde cada palpite
+            conta. Quem descobrir todas as palavras primeiro, vence!
+          </p>
+
+          <h2>Sobre o Jogo das Senhas</h2>
+          <p>
+            Um desafio de pura lógica. No Jogo das Senhas, cada jogador define
+            uma senha secreta de 4 números. Os jogadores então se revezam
+            tentando adivinhar a senha um do outro. A cada tentativa, você
+            descobre quantos números acertou. Quem decifrar o código primeiro é
+            o grande vencedor!
+          </p>
         </div>
 
         <div class="ad-container">
@@ -205,6 +270,35 @@
     <footer>
       <a href="politica-de-privacidade.html">Política de Privacidade</a>
       <a href="termos-de-uso.html">Termos de Uso</a>
+      <a href="sobre.html">Sobre Nós</a>
     </footer>
+
+    <script>
+      // Adiciona um listener para quando o documento HTML estiver pronto
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-descriptions");
+        const descriptionsContent = document.getElementById(
+          "descriptions-content"
+        );
+
+        // Verifica se os dois elementos existem antes de adicionar o evento
+        if (toggleButton && descriptionsContent) {
+          toggleButton.addEventListener("click", function () {
+            // Verifica se a descrição está visível
+            const isVisible = descriptionsContent.classList.contains("visible");
+
+            if (isVisible) {
+              // Se estiver visível, oculta e muda o texto do botão
+              descriptionsContent.classList.remove("visible");
+              toggleButton.textContent = "Ver descrição dos jogos";
+            } else {
+              // Se estiver oculto, mostra e muda o texto do botão
+              descriptionsContent.classList.add("visible");
+              toggleButton.textContent = "Ocultar descrições";
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>
